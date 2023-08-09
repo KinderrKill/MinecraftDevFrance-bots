@@ -4,6 +4,7 @@ import { GuildMember, Interaction, SlashCommandBuilder } from 'discord.js';
 import { User } from '../domain/leveling/user';
 
 export const command: SlashCommand = {
+  cooldown: 30,
   name: 'level',
   data: new SlashCommandBuilder()
     .setName('level')

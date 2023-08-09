@@ -9,6 +9,7 @@ import {
   Guild,
   AttachmentBuilder,
   ModalSubmitInteraction,
+  Collection,
 } from 'discord.js';
 import { CHANNEL } from '../utils/constants';
 import { BotEvent } from '../types';
@@ -38,8 +39,33 @@ const event: BotEvent = {
     if (!interaction.isChatInputCommand()) return;
 
     const command = interaction.client.slashCommands.get(interaction.commandName);
-
     if (!command) return;
+
+    const { cooldowns } = interaction.client;
+
+    if (!cooldowns.has(command.data.name)) {
+      cooldowns.set(command.data.name, new Collection());
+    }
+
+    const now = Date.now();
+    const timestamps = cooldowns.get(command.data.name);
+    const defaultCooldownDuration = 3;
+    const cooldownAmount = (command.cooldown ?? defaultCooldownDuration) * 1000;
+
+    if (timestamps.has(interaction.user.id)) {
+      const expirationTime = timestamps.get(interaction.user.id) + cooldownAmount;
+
+      if (now < expirationTime) {
+        const expiredTimestamp = Math.round(expirationTime / 1000);
+        return interaction.reply({
+          content: `S'il vous plait, vous avez déjà executé la commande \`${command.data.name}\`. Vous pourrez la refaire dans <t:${expiredTimestamp}:R>.`,
+          ephemeral: true,
+        });
+      }
+    }
+
+    timestamps.set(interaction.user.id, now);
+    setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
     await command.execute(interaction);
   },

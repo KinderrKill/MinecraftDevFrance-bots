@@ -33,6 +33,8 @@ readdirSync(handlersDir).forEach((handler) => {
   require(`${handlersDir}/${handler}`)(client);
 });
 
+client.cooldowns = new Collection();
+
 cron.schedule('0 2 * * *', async () => {
   saveModifiedData();
 });

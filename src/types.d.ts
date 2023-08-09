@@ -16,6 +16,7 @@ declare global {
 declare module 'discord.js' {
   export interface Client {
     slashCommands: Collection<string, SlashCommand>;
+    cooldowns: Collection<string, Collection>;
   }
 }
 
@@ -28,6 +29,7 @@ export interface BotEvent {
 export interface SlashCommand {
   name: string;
   data: SlashCommandBuilder;
+  cooldown?: number;
   execute: (interaction: CommandInteraction) => Promise<void>;
 }
 

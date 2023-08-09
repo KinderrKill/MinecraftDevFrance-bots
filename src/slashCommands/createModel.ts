@@ -14,6 +14,7 @@ const embedMessage = {
 };
 
 export const command: SlashCommand = {
+  cooldown: 60,
   name: 'model',
   data: new SlashCommandBuilder()
     .setName('model')

@@ -19,6 +19,13 @@ export const UserSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  warns: [
+    {
+      authorId: String,
+      reason: String,
+      date: Date,
+    },
+  ],
 });
 
 export default mongoose.model('User', UserSchema, 'Users');

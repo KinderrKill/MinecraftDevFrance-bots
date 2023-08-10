@@ -1,4 +1,5 @@
 import { ModifiableData } from '../modifiableData';
+import { Warn } from '../warn';
 
 export class User extends ModifiableData {
   private id: string;
@@ -6,14 +7,23 @@ export class User extends ModifiableData {
   private level: number;
   private experience: number;
   private sendedMessage: number;
+  private warns: Warn[];
 
-  constructor(id: string, displayName: string, level: number, experience: number, sendedMessage: number) {
+  constructor(
+    id: string,
+    displayName: string,
+    level: number,
+    experience: number,
+    sendedMessage: number,
+    warn?: Warn[]
+  ) {
     super();
     this.id = id;
     this.displayName = displayName;
     this.level = level;
     this.experience = experience;
     this.sendedMessage = sendedMessage;
+    this.warns = warn ? warn : [];
   }
 
   getId() {
@@ -48,5 +58,14 @@ export class User extends ModifiableData {
 
   getSendedMessage() {
     return this.sendedMessage;
+  }
+
+  addWarn(authorId: string, reason: string) {
+    this.warns.push(new Warn(authorId, reason));
+    this.setIsModified();
+  }
+
+  getWarns() {
+    return this.warns;
   }
 }

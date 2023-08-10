@@ -19,6 +19,7 @@ export default class UserReposiroty {
       level: user.getLevel(),
       experience: user.getExperience(),
       sendedMessage: user.getSendedMessage(),
+      warns: user.getWarns(),
     });
   }
 

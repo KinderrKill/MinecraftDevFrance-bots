@@ -3,6 +3,7 @@ import { CHANNEL, LEVELING_TABLE, ROLE } from '../../utils/constants';
 import { User } from './user';
 import UserReposiroty from '../../config/repository/userRepository';
 import { userRepository } from '../..';
+import { Warn } from '../warn';
 
 export class LevelingManager {
   private users: User[];
@@ -16,7 +17,12 @@ export class LevelingManager {
   async onLoad() {
     const dbUsers = await this.userRepository.getAll();
     dbUsers.forEach((dbUser) => {
-      this.users.push(new User(dbUser.id, dbUser.displayName, dbUser.level, dbUser.experience, dbUser.sendedMessage));
+      const warns = dbUser.warns.map(
+        (warnData) => new Warn(warnData.authorId, warnData.reason, warnData.date.getTime())
+      );
+      this.users.push(
+        new User(dbUser.id, dbUser.displayName, dbUser.level, dbUser.experience, dbUser.sendedMessage, warns)
+      );
     });
 
     console.log('[LevelingManager] Load ' + this.users.length + ' users');

@@ -16,6 +16,8 @@ const event: BotEvent = {
     const user = levelingManager.registerOrGetUser(message.author.id, message.author.displayName);
     user.incrementSendedMessage();
 
+    verifyCode(message);
+
     const expCategoryId = '1138824826149163079';
     const channel = message.guild.channels.cache.get(message.channelId);
 
@@ -57,6 +59,42 @@ const event: BotEvent = {
 };
 
 export default event;
+
+async function verifyCode(message: Message) {
+  const codeIndicators = [';', '{', '}', '(', ')', '=', '+', '-', '*', '/'];
+  const containsCode = codeIndicators.some((indicator) => message.content.includes(indicator));
+
+  const codeBlockPattern = /```[\s\S]*?```/g;
+  const codeBlockMatches = message.content.match(codeBlockPattern);
+
+  const inlineCodePattern = /`[^`]+`/g;
+  const inlineCodeMatches = message.content.match(inlineCodePattern);
+
+  const inlineCodeThreshold = 3;
+
+  if (containsCode) {
+    if (inlineCodeMatches && inlineCodeMatches.length >= inlineCodeThreshold) {
+      try {
+        await message.reply({
+          content:
+            'Il semble que vous ayez inclus beaucoup de code en brut. Veuillez utiliser des blocs de code avec les ``` (backticks) pour une meilleure lisibilité.',
+        });
+      } catch (error) {
+        console.error(`Error sending message: ${error}`);
+      }
+    } else if (codeBlockMatches && codeBlockMatches.length === 0) {
+      try {
+        await message.reply({
+          content:
+            'Veuillez utiliser des blocs de code avec les ``` (backticks) pour formater correctement votre code.',
+        });
+        await message.react('❗');
+      } catch (error) {
+        console.error(`Error sending message: ${error}`);
+      }
+    }
+  }
+}
 
 function sendLevelUpEmbedMessage(chanel: Channel, member: GuildMember, user: User) {
   if (chanel instanceof TextChannel) {

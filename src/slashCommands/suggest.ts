@@ -7,6 +7,7 @@ import {
   TextInputStyle,
 } from 'discord.js';
 import { SlashCommand } from './../types';
+
 export const command: SlashCommand = {
   cooldown: 30,
   name: 'suggest',

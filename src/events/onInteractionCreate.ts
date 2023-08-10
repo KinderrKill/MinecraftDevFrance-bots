@@ -117,10 +117,7 @@ async function sendWelcomeEmbedMessage(interaction: ButtonInteraction, member: G
 }
 
 async function handleSuggestModal(interaction: ModalSubmitInteraction) {
-  console.log(interaction);
-
   const suggestContent = interaction.fields.getTextInputValue('suggestContent');
-  console.log({ suggestContent });
 
   const suggestionChannel = interaction.guild.channels.cache.get(CHANNEL.SUGGESTION) as TextChannel;
 

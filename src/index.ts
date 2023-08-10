@@ -9,6 +9,9 @@ import UserRepository from './config/repository/userRepository';
 import cron from 'node-cron';
 
 dotenv.config();
+
+export const isDevMode = process.env.ENV === 'dev';
+
 connectToDB();
 
 export const userRepository = new UserRepository();
@@ -43,7 +46,7 @@ process.on('exit', async () => {
   saveModifiedData();
 });
 
-client.login(process.env.TOKEN).catch((err) => {
+client.login(isDevMode ? process.env.TOKEN_DEV : process.env.TOKEN).catch((err) => {
   console.error('[Login Error]', err);
   process.exit(1);
 });

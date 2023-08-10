@@ -1,11 +1,11 @@
-import { Channel, Client, EmbedBuilder, Events, GuildMember, Message, Role, TextChannel } from 'discord.js';
-import { levelingManager } from '../index.js';
+import { Channel, EmbedBuilder, Events, GuildMember, Message, Role, TextChannel } from 'discord.js';
+import { isDevMode, levelingManager } from '../index.js';
 import { User } from '../domain/leveling/user.js';
 import { CHANNEL, ROLE } from '../utils/constants.js';
 import { BotEvent } from './../types.js';
 
 const MIN_LENGHT_PER_MESSAGE = 50;
-const EXP_PER_MESSAGE = 10;
+const EXP_PER_MESSAGE = 20;
 const MAX_LEVEL = 50;
 
 const event: BotEvent = {
@@ -18,10 +18,10 @@ const event: BotEvent = {
 
     verifyCode(message);
 
-    const expCategoryId = '1138824826149163079';
+    const expCategoryId = isDevMode ? ['1138824826149163079'] : ['1138950712768864358', '1138950869145104447'];
     const channel = message.guild.channels.cache.get(message.channelId);
 
-    if (channel.parentId === expCategoryId && message.content.length >= MIN_LENGHT_PER_MESSAGE) {
+    if (expCategoryId.find((id) => id === channel.parentId) && message.content.length >= MIN_LENGHT_PER_MESSAGE) {
       if (user.getLevel() >= MAX_LEVEL) return;
 
       const userLevelUp = levelingManager.addExperienceTo(null, user.getId(), EXP_PER_MESSAGE);

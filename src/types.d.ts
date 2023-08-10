@@ -3,7 +3,7 @@ import { SlashCommand } from './utils/types';
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      NODE_ENV: string;
+      ENV: string;
       CLIENT_ID: string;
       TOKEN: string;
       CLIENT_DEV_ID: string;

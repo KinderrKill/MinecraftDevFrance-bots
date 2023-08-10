@@ -1,4 +1,4 @@
-import { Embed, SlashCommandBuilder, EmbedBuilder, GuildMember, TextChannel } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, GuildMember, TextChannel, PermissionsBitField } from 'discord.js';
 import { CHANNEL, getChannel } from '../utils/constants';
 import { isDevMode, levelingManager } from './../index';
 import { SlashCommand } from './../types';
@@ -9,9 +9,8 @@ export const command: SlashCommand = {
     .setName('warn')
     .setDescription('Averti un joueur pour un comportement inaproprié')
     .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true))
-    .addStringOption((option) =>
-      option.setName('raison').setDescription("raison de l'avertissement").setRequired(true)
-    ),
+    .addStringOption((option) => option.setName('raison').setDescription("raison de l'avertissement").setRequired(true))
+    .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers),
   execute: async (interaction) => {
     const inputUser = interaction.options.getUser('utilisateur');
     if (inputUser === undefined) {

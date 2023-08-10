@@ -74,8 +74,6 @@ const event: BotEvent = {
 export default event;
 
 function handleConfirmRules(interaction: ButtonInteraction) {
-  console.log(getRole(ROLE.MEMBER, isDevMode));
-
   const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER, isDevMode));
 
   if (!role) {

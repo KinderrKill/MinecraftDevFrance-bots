@@ -1,7 +1,7 @@
 import { Channel, EmbedBuilder, Events, GuildMember, Message, Role, TextChannel } from 'discord.js';
 import { isDevMode, levelingManager } from '../index.js';
 import { User } from '../domain/leveling/user.js';
-import { CHANNEL, ROLE } from '../utils/constants.js';
+import { CHANNEL, ROLE, getRole, getChannel } from '../utils/constants.js';
 import { BotEvent } from './../types.js';
 
 const MIN_LENGHT_PER_MESSAGE = 50;
@@ -27,27 +27,27 @@ const event: BotEvent = {
       const userLevelUp = levelingManager.addExperienceTo(null, user.getId(), EXP_PER_MESSAGE);
 
       if (userLevelUp) {
-        const channel = message.client.channels.cache.get(CHANNEL.LEVEL_NOTIF);
+        const channel = message.client.channels.cache.get(getChannel(CHANNEL.LEVEL_NOTIF, isDevMode));
 
         const userLevel = user.getLevel();
         if (userLevel === 10) {
-          const role = message.guild.roles.cache.get(ROLE.MEMBER_SILVER);
+          const role = message.guild.roles.cache.get(getRole(ROLE.MEMBER_SILVER, isDevMode));
           sendLevelUpEmbedMessageWithRankUnlock(channel, message.member, user, role);
           message.member.roles.add(role);
         } else if (userLevel === 20) {
-          const role = message.guild.roles.cache.get(ROLE.MEMBER_GOLD);
+          const role = message.guild.roles.cache.get(getRole(ROLE.MEMBER_GOLD, isDevMode));
           sendLevelUpEmbedMessageWithRankUnlock(channel, message.member, user, role);
           message.member.roles.add(role);
         } else if (userLevel === 30) {
-          const role = message.guild.roles.cache.get(ROLE.MEMBER_DIAMOND);
+          const role = message.guild.roles.cache.get(getRole(ROLE.MEMBER_DIAMOND, isDevMode));
           sendLevelUpEmbedMessageWithRankUnlock(channel, message.member, user, role);
           message.member.roles.add(role);
         } else if (userLevel === 40) {
-          const role = message.guild.roles.cache.get(ROLE.MEMBER_EMERALD);
+          const role = message.guild.roles.cache.get(getRole(ROLE.MEMBER_EMERALD, isDevMode));
           sendLevelUpEmbedMessageWithRankUnlock(channel, message.member, user, role);
           message.member.roles.add(role);
         } else if (userLevel === 50) {
-          const role = message.guild.roles.cache.get(ROLE.MEMBER_OBSIDIAN);
+          const role = message.guild.roles.cache.get(getRole(ROLE.MEMBER_OBSIDIAN, isDevMode));
           sendLevelUpEmbedMessageWithRankUnlock(channel, message.member, user, role);
           message.member.roles.add(role);
         } else {

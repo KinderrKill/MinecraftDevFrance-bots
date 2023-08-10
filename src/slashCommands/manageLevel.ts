@@ -1,12 +1,11 @@
 import { levelingManager } from './../index';
 import { PermissionsBitField, SlashCommandBuilder } from 'discord.js';
-import { isModerator } from '../utils/constants';
 import { SlashCommand } from './../types';
 
 export const command: SlashCommand = {
-  name: 'managelvl',
+  name: 'manage_lvl',
   data: new SlashCommandBuilder()
-    .setName('managelvl')
+    .setName('manage_lvl')
     .setDescription('Gestion des niveaux des utilisateurs')
     .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true))
     .addStringOption((option) =>
@@ -23,8 +22,6 @@ export const command: SlashCommand = {
     .addNumberOption((option) => option.setName('montant').setDescription('montant').setRequired(true))
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers),
   execute: async (interaction) => {
-    if (!isModerator(interaction.member)) return;
-
     const inputUser = interaction.options.getUser('utilisateur');
     const inputFunction = interaction.options.getString('fonction');
     const inputAmount = interaction.options.getNumber('montant');

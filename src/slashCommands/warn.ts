@@ -1,6 +1,6 @@
 import { Embed, SlashCommandBuilder, EmbedBuilder, GuildMember, TextChannel } from 'discord.js';
-import { CHANNEL } from '../utils/constants';
-import { levelingManager } from './../index';
+import { CHANNEL, getChannel } from '../utils/constants';
+import { isDevMode, levelingManager } from './../index';
 import { SlashCommand } from './../types';
 
 export const command: SlashCommand = {
@@ -35,7 +35,7 @@ export const command: SlashCommand = {
         ],
       });
 
-      const logChannel = interaction.guild.channels.cache.get(CHANNEL.STAFF_LOG);
+      const logChannel = interaction.guild.channels.cache.get(getChannel(CHANNEL.STAFF_LOG, isDevMode));
       if (logChannel instanceof TextChannel) {
         logChannel.send({
           embeds: [

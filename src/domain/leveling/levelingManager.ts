@@ -1,8 +1,8 @@
 import { Channel, EmbedBuilder, TextChannel, Role, ChatInputCommandInteraction } from 'discord.js';
-import { CHANNEL, LEVELING_TABLE, ROLE } from '../../utils/constants';
+import { CHANNEL, getChannel, getRole, LEVELING_TABLE, ROLE } from '../../utils/constants';
 import { User } from './user';
 import UserReposiroty from '../../config/repository/userRepository';
-import { userRepository } from '../..';
+import { isDevMode, userRepository } from '../..';
 import { Warn } from '../warn';
 
 export class LevelingManager {
@@ -136,27 +136,27 @@ export class LevelingManager {
   }
 
   levelChangeEvent(user: User, interaction: ChatInputCommandInteraction) {
-    const channel = interaction.guild.channels.cache.get(CHANNEL.LEVEL_NOTIF);
+    const channel = interaction.guild.channels.cache.get(getChannel(CHANNEL.LEVEL_NOTIF, isDevMode));
 
     const userLevel = user.getLevel();
     if (userLevel === 10) {
-      const role = interaction.guild.roles.cache.get(ROLE.MEMBER_SILVER);
+      const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER_SILVER, isDevMode));
       this.sendLevelUpEmbedMessageWithRankUnlock(channel, user, role);
       interaction.guild.members.cache.get(user.getId()).roles.add(role);
     } else if (userLevel === 20) {
-      const role = interaction.guild.roles.cache.get(ROLE.MEMBER_GOLD);
+      const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER_GOLD, isDevMode));
       this.sendLevelUpEmbedMessageWithRankUnlock(channel, user, role);
       interaction.guild.members.cache.get(user.getId()).roles.add(role);
     } else if (userLevel === 30) {
-      const role = interaction.guild.roles.cache.get(ROLE.MEMBER_DIAMOND);
+      const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER_DIAMOND, isDevMode));
       this.sendLevelUpEmbedMessageWithRankUnlock(channel, user, role);
       interaction.guild.members.cache.get(user.getId()).roles.add(role);
     } else if (userLevel === 40) {
-      const role = interaction.guild.roles.cache.get(ROLE.MEMBER_EMERALD);
+      const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER_EMERALD, isDevMode));
       this.sendLevelUpEmbedMessageWithRankUnlock(channel, user, role);
       interaction.guild.members.cache.get(user.getId()).roles.add(role);
     } else if (userLevel === 50) {
-      const role = interaction.guild.roles.cache.get(ROLE.MEMBER_OBSIDIAN);
+      const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER_OBSIDIAN, isDevMode));
       this.sendLevelUpEmbedMessageWithRankUnlock(channel, user, role);
       interaction.guild.members.cache.get(user.getId()).roles.add(role);
     } else {

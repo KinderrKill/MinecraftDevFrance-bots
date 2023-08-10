@@ -1,4 +1,4 @@
-import { BUTTON_ID, isAdmin } from '../utils/constants';
+import { BUTTON_ID } from '../utils/constants';
 import { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
 import { SlashCommand } from '../types';
 
@@ -92,8 +92,6 @@ export const command: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers),
   execute: async (interaction) => {
-    if (!isAdmin(interaction.member)) return;
-
     await interaction.reply({
       embeds: [embedMessage],
       components: [new ActionRowBuilder().addComponents(confirm)],

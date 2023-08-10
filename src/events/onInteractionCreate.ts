@@ -1,4 +1,4 @@
-import { levelingManager, userRepository } from './../index';
+import { isDevMode, levelingManager, userRepository } from './../index';
 import {
   Events,
   Interaction,
@@ -11,7 +11,7 @@ import {
   ModalSubmitInteraction,
   Collection,
 } from 'discord.js';
-import { CHANNEL } from '../utils/constants';
+import { CHANNEL, getChannel, getRole } from '../utils/constants';
 import { BotEvent } from '../types';
 import { BUTTON_ID, ROLE } from '../utils/constants';
 import { User } from '../domain/leveling/user';
@@ -74,7 +74,9 @@ const event: BotEvent = {
 export default event;
 
 function handleConfirmRules(interaction: ButtonInteraction) {
-  const role = interaction.guild.roles.cache.get(ROLE.MEMBER);
+  console.log(getRole(ROLE.MEMBER, isDevMode));
+
+  const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER, isDevMode));
 
   if (!role) {
     return interaction.reply({ content: '[HandleConfirmRules] Role not found', ephemeral: true });
@@ -90,7 +92,9 @@ function handleConfirmRules(interaction: ButtonInteraction) {
 
   levelingManager.registerOrGetUser(member.id, member.displayName);
 
-  interaction.guild.channels.cache.get(CHANNEL.MEMBER_COUNT).setName('Membres : ' + (role.members.size + 1));
+  interaction.guild.channels.cache
+    .get(getChannel(CHANNEL.MEMBER_COUNT, isDevMode))
+    .setName('Membres : ' + (role.members.size + 1));
 
   sendWelcomeEmbedMessage(interaction, member);
 
@@ -98,7 +102,7 @@ function handleConfirmRules(interaction: ButtonInteraction) {
 }
 
 async function sendWelcomeEmbedMessage(interaction: ButtonInteraction, member: GuildMember) {
-  const chanel = interaction.client.channels.cache.get(CHANNEL.WELCOME_HALL);
+  const chanel = interaction.client.channels.cache.get(getChannel(CHANNEL.WELCOME_HALL, isDevMode));
   if (chanel instanceof TextChannel) {
     const message = await chanel.send({
       embeds: [
@@ -119,7 +123,9 @@ async function sendWelcomeEmbedMessage(interaction: ButtonInteraction, member: G
 async function handleSuggestModal(interaction: ModalSubmitInteraction) {
   const suggestContent = interaction.fields.getTextInputValue('suggestContent');
 
-  const suggestionChannel = interaction.guild.channels.cache.get(CHANNEL.SUGGESTION) as TextChannel;
+  const suggestionChannel = interaction.guild.channels.cache.get(
+    getChannel(CHANNEL.SUGGESTION, isDevMode)
+  ) as TextChannel;
 
   const embedMessage = new EmbedBuilder()
     .setAuthor({
@@ -135,7 +141,10 @@ async function handleSuggestModal(interaction: ModalSubmitInteraction) {
   message.react('👎');
 
   await interaction.reply({
-    content: `Votre suggestion à bien été prise en compte, vous la retrouverez ici <#${CHANNEL.SUGGESTION}>`,
+    content: `Votre suggestion à bien été prise en compte, vous la retrouverez ici <#${getChannel(
+      CHANNEL.SUGGESTION,
+      isDevMode
+    )}>`,
     ephemeral: true,
   });
 }

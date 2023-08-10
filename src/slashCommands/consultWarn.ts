@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, EmbedBuilder, PermissionsBitField, GuildMember } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, Guild, GuildMember } from 'discord.js';
 import { Warn } from '../domain/warn';
 import { levelingManager } from './../index';
 import { SlashCommand } from './../types';
@@ -8,8 +8,7 @@ export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('consultwarn')
     .setDescription("Consultation des avertissements d'un utilisateur")
-    .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true))
-    .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers),
+    .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true)),
   execute: async (interaction) => {
     const inputUser = interaction.options.getUser('utilisateur');
     if (inputUser === undefined) {

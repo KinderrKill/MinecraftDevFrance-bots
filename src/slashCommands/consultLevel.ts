@@ -13,13 +13,19 @@ export const command: SlashCommand = {
       option
         .setName('function')
         .setDescription('fonction')
-        .addChoices({ name: 'ma progression', value: 'consult' }, { name: 'classement des joueurs', value: 'top' })
+        .addChoices(
+          { name: 'ma progression', value: 'consult' },
+          { name: 'classement des joueurs', value: 'top' }
+        )
         .setRequired(true)
     ),
   execute: async (interaction) => {
     const user = levelingManager.getUserById(interaction.member.id);
     if (user === undefined) {
-      await interaction.reply({ content: 'Impossible de trouver les données du joueur !', ephemeral: true });
+      await interaction.reply({
+        content: 'Impossible de trouver les données du joueur !',
+        ephemeral: true,
+      });
     } else {
       const inputFunction = interaction.options.getString('function');
       if (inputFunction === 'consult') {
@@ -27,7 +33,10 @@ export const command: SlashCommand = {
       } else if (inputFunction === 'top') {
         await interaction.reply({ embeds: [getTopEmbedMessage(interaction)] });
       } else {
-        await interaction.reply({ content: 'Aucune fonction de défini pour la commande !', ephemeral: true });
+        await interaction.reply({
+          content: 'Aucune fonction de défini pour la commande !',
+          ephemeral: true,
+        });
       }
     }
   },

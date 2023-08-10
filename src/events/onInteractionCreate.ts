@@ -24,7 +24,8 @@ const event: BotEvent = {
       const buttonInteraction = interaction as ButtonInteraction;
 
       // Confirm rules function
-      if (buttonInteraction.customId === BUTTON_ID.CONFIRM_RULES) handleConfirmRules(buttonInteraction);
+      if (buttonInteraction.customId === BUTTON_ID.CONFIRM_RULES)
+        handleConfirmRules(buttonInteraction);
       return;
     }
 
@@ -85,7 +86,10 @@ function handleConfirmRules(interaction: ButtonInteraction) {
   const member = interaction.guild.members.cache.get(interaction.member.user.id);
 
   if (member.roles.cache.get(role.id)) {
-    return interaction.reply({ content: 'Vous avez déjà validé la lecture du réglement !', ephemeral: true });
+    return interaction.reply({
+      content: 'Vous avez déjà validé la lecture du réglement !',
+      ephemeral: true,
+    });
   }
 
   member.roles.add(role);
@@ -98,7 +102,10 @@ function handleConfirmRules(interaction: ButtonInteraction) {
 
   sendWelcomeEmbedMessage(interaction, member);
 
-  return interaction.reply({ content: 'Vous êtes maintenant membre de ce discord !', ephemeral: true });
+  return interaction.reply({
+    content: 'Vous êtes maintenant membre de ce discord !',
+    ephemeral: true,
+  });
 }
 
 async function sendWelcomeEmbedMessage(interaction: ButtonInteraction, member: GuildMember) {

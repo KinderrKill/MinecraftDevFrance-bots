@@ -21,7 +21,14 @@ export class LevelingManager {
         (warnData) => new Warn(warnData.authorId, warnData.reason, warnData.date.getTime())
       );
       this.users.push(
-        new User(dbUser.id, dbUser.displayName, dbUser.level, dbUser.experience, dbUser.sendedMessage, warns)
+        new User(
+          dbUser.id,
+          dbUser.displayName,
+          dbUser.level,
+          dbUser.experience,
+          dbUser.sendedMessage,
+          warns
+        )
       );
     });
 
@@ -53,7 +60,11 @@ export class LevelingManager {
   /*
    * Return true if the user level up
    */
-  addExperienceTo(interaction: ChatInputCommandInteraction, userId: string, amount: number): boolean {
+  addExperienceTo(
+    interaction: ChatInputCommandInteraction,
+    userId: string,
+    amount: number
+  ): boolean {
     const user = this.getUserById(userId);
     if (user === undefined) throw new Error(`User ${userId} is undefined !`);
 
@@ -84,7 +95,12 @@ export class LevelingManager {
     user.setExperience(newExperience);
   }
 
-  addLevelTo(interaction: ChatInputCommandInteraction, userId: string, amount: number, byCommand?: boolean) {
+  addLevelTo(
+    interaction: ChatInputCommandInteraction,
+    userId: string,
+    amount: number,
+    byCommand?: boolean
+  ) {
     const user = this.getUserById(userId);
     if (user === undefined) throw new Error(`User ${userId} is undefined !`);
 
@@ -101,7 +117,12 @@ export class LevelingManager {
     }
   }
 
-  removeLevelTo(interaction: ChatInputCommandInteraction, userId: string, amount: number, byCommand?: boolean) {
+  removeLevelTo(
+    interaction: ChatInputCommandInteraction,
+    userId: string,
+    amount: number,
+    byCommand?: boolean
+  ) {
     const user = this.getUserById(userId);
     if (user === undefined) throw new Error(`User ${userId} is undefined !`);
 
@@ -117,7 +138,12 @@ export class LevelingManager {
     }
   }
 
-  setLevelTo(interaction: ChatInputCommandInteraction, userId: string, amount: number, byCommand?: boolean) {
+  setLevelTo(
+    interaction: ChatInputCommandInteraction,
+    userId: string,
+    amount: number,
+    byCommand?: boolean
+  ) {
     const user = this.getUserById(userId);
     if (user === undefined) throw new Error(`User ${userId} is undefined !`);
 
@@ -136,7 +162,9 @@ export class LevelingManager {
   }
 
   levelChangeEvent(user: User, interaction: ChatInputCommandInteraction) {
-    const channel = interaction.guild.channels.cache.get(getChannel(CHANNEL.LEVEL_NOTIF, isDevMode));
+    const channel = interaction.guild.channels.cache.get(
+      getChannel(CHANNEL.LEVEL_NOTIF, isDevMode)
+    );
 
     const userLevel = user.getLevel();
     if (userLevel === 10) {

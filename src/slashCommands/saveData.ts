@@ -4,7 +4,9 @@ import { SlashCommand } from './../types';
 
 export const command: SlashCommand = {
   name: 'savedata',
-  data: new SlashCommandBuilder().setName('savedata').setDescription('Force la sauvegarde des données.'),
+  data: new SlashCommandBuilder()
+    .setName('savedata')
+    .setDescription('Force la sauvegarde des données.'),
   execute: async (interaction) => {
     saveModifiedData();
     await interaction.reply({

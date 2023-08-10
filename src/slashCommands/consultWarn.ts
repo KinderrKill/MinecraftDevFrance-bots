@@ -8,11 +8,16 @@ export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('consultwarn')
     .setDescription("Consultation des avertissements d'un utilisateur")
-    .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true)),
+    .addUserOption((option) =>
+      option.setName('utilisateur').setDescription('utilisateur').setRequired(true)
+    ),
   execute: async (interaction) => {
     const inputUser = interaction.options.getUser('utilisateur');
     if (inputUser === undefined) {
-      await interaction.reply({ content: "Impossible de trouver les données de l'utilisateur !", ephemeral: true });
+      await interaction.reply({
+        content: "Impossible de trouver les données de l'utilisateur !",
+        ephemeral: true,
+      });
     } else {
       const target = levelingManager.getUserById(inputUser.id);
       if (target === undefined) {
@@ -25,7 +30,10 @@ export const command: SlashCommand = {
 
       const member: GuildMember = interaction.guild.members.cache.get(inputUser.id);
       if (member === undefined) {
-        await interaction.reply({ content: "Impossible de trouver les données de l'utilisateur !", ephemeral: true });
+        await interaction.reply({
+          content: "Impossible de trouver les données de l'utilisateur !",
+          ephemeral: true,
+        });
       } else {
         const warns: Warn[] = target.getWarns();
         const convertedWarns = [];

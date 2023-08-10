@@ -18,9 +18,15 @@ export const command: SlashCommand = {
   name: 'model',
   data: new SlashCommandBuilder()
     .setName('model')
-    .setDescription("Affiche un modèle de demande d'aide afin de correctement rédiger votre message.")
+    .setDescription(
+      "Affiche un modèle de demande d'aide afin de correctement rédiger votre message."
+    )
     .addStringOption((option) =>
-      option.setName('type').setDescription('type').addChoices({ name: 'mcp', value: 'mcp' }).setRequired(true)
+      option
+        .setName('type')
+        .setDescription('type')
+        .addChoices({ name: 'mcp', value: 'mcp' })
+        .setRequired(true)
     ),
   execute: async (interaction) => {
     //const inputUser = interaction.options.getUser('type');

@@ -18,16 +18,23 @@ const event: BotEvent = {
 
     verifyCode(message);
 
-    const expCategoryId = isDevMode ? ['1138824826149163079'] : ['1138950712768864358', '1138950869145104447'];
+    const expCategoryId = isDevMode
+      ? ['1138824826149163079']
+      : ['1138950712768864358', '1138950869145104447'];
     const channel = message.guild.channels.cache.get(message.channelId);
 
-    if (expCategoryId.find((id) => id === channel.parentId) && message.content.length >= MIN_LENGHT_PER_MESSAGE) {
+    if (
+      expCategoryId.find((id) => id === channel.parentId) &&
+      message.content.length >= MIN_LENGHT_PER_MESSAGE
+    ) {
       if (user.getLevel() >= MAX_LEVEL) return;
 
       const userLevelUp = levelingManager.addExperienceTo(null, user.getId(), EXP_PER_MESSAGE);
 
       if (userLevelUp) {
-        const channel = message.client.channels.cache.get(getChannel(CHANNEL.LEVEL_NOTIF, isDevMode));
+        const channel = message.client.channels.cache.get(
+          getChannel(CHANNEL.LEVEL_NOTIF, isDevMode)
+        );
 
         const userLevel = user.getLevel();
         if (userLevel === 10) {
@@ -113,7 +120,12 @@ function sendLevelUpEmbedMessage(chanel: Channel, member: GuildMember, user: Use
   }
 }
 
-function sendLevelUpEmbedMessageWithRankUnlock(chanel: Channel, member: GuildMember, user: User, role: Role) {
+function sendLevelUpEmbedMessageWithRankUnlock(
+  chanel: Channel,
+  member: GuildMember,
+  user: User,
+  role: Role
+) {
   if (chanel instanceof TextChannel) {
     chanel.send({
       embeds: [

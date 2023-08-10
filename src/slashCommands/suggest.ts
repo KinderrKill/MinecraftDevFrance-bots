@@ -23,7 +23,9 @@ export const command: SlashCommand = {
       .setPlaceholder('Votre texte ici')
       .setStyle(TextInputStyle.Paragraph);
 
-    const actionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(suggestInput);
+    const actionRow = new ActionRowBuilder<ModalActionRowComponentBuilder>().addComponents(
+      suggestInput
+    );
 
     modal.addComponents(actionRow);
 

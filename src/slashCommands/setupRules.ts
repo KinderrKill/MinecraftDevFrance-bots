@@ -1,5 +1,11 @@
 import { BUTTON_ID } from '../utils/constants';
-import { SlashCommandBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle, PermissionsBitField } from 'discord.js';
+import {
+  SlashCommandBuilder,
+  ButtonBuilder,
+  ActionRowBuilder,
+  ButtonStyle,
+  PermissionsBitField,
+} from 'discord.js';
 import { SlashCommand } from '../types';
 
 const confirm = new ButtonBuilder()

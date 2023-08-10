@@ -8,14 +8,19 @@ export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('warn')
     .setDescription('Averti un joueur pour un comportement inaproprié')
-    .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true))
+    .addUserOption((option) =>
+      option.setName('utilisateur').setDescription('utilisateur').setRequired(true)
+    )
     .addStringOption((option) =>
       option.setName('raison').setDescription("raison de l'avertissement").setRequired(true)
     ),
   execute: async (interaction) => {
     const inputUser = interaction.options.getUser('utilisateur');
     if (inputUser === undefined) {
-      await interaction.reply({ content: "Impossible de trouver les données de l'utilisateur !", ephemeral: true });
+      await interaction.reply({
+        content: "Impossible de trouver les données de l'utilisateur !",
+        ephemeral: true,
+      });
     } else {
       const inputReason = interaction.options.getString('raison');
       const target = levelingManager.getUserById(inputUser.id);
@@ -31,11 +36,15 @@ export const command: SlashCommand = {
       const member: GuildMember = interaction.guild.members.cache.get(inputUser.id);
       member.send({
         embeds: [
-          new EmbedBuilder().setTitle('Avertissement reçu !').setFields({ name: 'Raison: ', value: `${inputReason}` }),
+          new EmbedBuilder()
+            .setTitle('Avertissement reçu !')
+            .setFields({ name: 'Raison: ', value: `${inputReason}` }),
         ],
       });
 
-      const logChannel = interaction.guild.channels.cache.get(getChannel(CHANNEL.STAFF_LOG, isDevMode));
+      const logChannel = interaction.guild.channels.cache.get(
+        getChannel(CHANNEL.STAFF_LOG, isDevMode)
+      );
       if (logChannel instanceof TextChannel) {
         logChannel.send({
           embeds: [

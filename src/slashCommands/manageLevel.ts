@@ -7,7 +7,9 @@ export const command: SlashCommand = {
   data: new SlashCommandBuilder()
     .setName('manage_lvl')
     .setDescription('Gestion des niveaux des utilisateurs')
-    .addUserOption((option) => option.setName('utilisateur').setDescription('utilisateur').setRequired(true))
+    .addUserOption((option) =>
+      option.setName('utilisateur').setDescription('utilisateur').setRequired(true)
+    )
     .addStringOption((option) =>
       option
         .setName('fonction')
@@ -19,7 +21,9 @@ export const command: SlashCommand = {
         )
         .setRequired(true)
     )
-    .addNumberOption((option) => option.setName('montant').setDescription('montant').setRequired(true))
+    .addNumberOption((option) =>
+      option.setName('montant').setDescription('montant').setRequired(true)
+    )
     .setDefaultMemberPermissions(PermissionsBitField.Flags.ModerateMembers),
   execute: async (interaction) => {
     const inputUser = interaction.options.getUser('utilisateur');
@@ -28,7 +32,10 @@ export const command: SlashCommand = {
 
     const user = levelingManager.getUserById(inputUser.id);
     if (user === undefined) {
-      await interaction.reply({ content: 'Impossible de trouver les données du joueur !', ephemeral: true });
+      await interaction.reply({
+        content: 'Impossible de trouver les données du joueur !',
+        ephemeral: true,
+      });
     } else {
       if (inputFunction === 'add') {
         levelingManager.addLevelTo(interaction, user.getId(), inputAmount);
@@ -49,7 +56,10 @@ export const command: SlashCommand = {
           ephemeral: true,
         });
       } else {
-        await interaction.reply({ content: 'Aucune fonction de défini pour la commande !', ephemeral: true });
+        await interaction.reply({
+          content: 'Aucune fonction de défini pour la commande !',
+          ephemeral: true,
+        });
       }
     }
   },

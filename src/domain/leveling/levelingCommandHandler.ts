@@ -7,7 +7,5 @@ export class LevelingCommandHandler {
     this.levelingManager = levelingManager;
   }
 
-   addLevel(interaction: CommandInteraction, userId: string, amount: number) {
-    
-   }
+  addLevel(interaction: CommandInteraction, userId: string, amount: number) {}
 }

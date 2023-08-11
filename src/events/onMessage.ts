@@ -68,40 +68,58 @@ const event: BotEvent = {
 export default event;
 
 async function verifyCode(message: Message) {
-  const codeIndicators = [';', '{', '}', '(', ')', '=', '+', '-', '*', '/'];
-  const containsCode = codeIndicators.some((indicator) => message.content.includes(indicator));
+  const commonCodeIndicators = [';', '{', '}', '(', ')', '=', '+', '-', '*', '/', '.', ':'];
+  const javaCodeIndicators = [
+    "public", "private", "protected", "class", "interface", "enum",
+  ];
 
-  const codeBlockPattern = /```[\s\S]*?```/g;
-  const codeBlockMatches = message.content.match(codeBlockPattern);
-
+  const allCodeIndicators = [...commonCodeIndicators, ...javaCodeIndicators];
   const inlineCodePattern = /`[^`]+`/g;
-  const inlineCodeMatches = message.content.match(inlineCodePattern);
+  const inlineCodeThreshold = 7;
 
-  const inlineCodeThreshold = 3;
+  const { content, author } = message;
+  const containsCode = allCodeIndicators.some(indicator => content.includes(indicator));
+  const inlineCodeMatches = content.match(inlineCodePattern);
 
   if (containsCode) {
-    if (inlineCodeMatches && inlineCodeMatches.length >= inlineCodeThreshold) {
-      try {
-        await message.reply({
-          content:
-            'Il semble que vous ayez inclus beaucoup de code en brut. Veuillez utiliser des blocs de code avec les ``` (backticks) pour une meilleure lisibilité.',
-        });
-      } catch (error) {
-        console.error(`Error sending message: ${error}`);
-      }
-    } else if (codeBlockMatches && codeBlockMatches.length === 0) {
-      try {
-        await message.reply({
-          content:
-            'Veuillez utiliser des blocs de code avec les ``` (backticks) pour formater correctement votre code.',
-        });
+    const problematicCode = extractProblematicCode(content, inlineCodeMatches);
+    const errorMessage = inlineCodeMatches && inlineCodeMatches.length >= inlineCodeThreshold
+      ? 'Il semble que vous ayez inclus beaucoup de code en brut. Veuillez utiliser des blocs de code avec les ``` (backticks) pour une meilleure lisibilité.'
+      : 'Veuillez utiliser des blocs de code avec les ``` (backticks) pour formater correctement votre code.';
+
+    try {
+      await message.reply(`@${author.username}, ${errorMessage}`);
+      await message.reply(`Voici la partie du message qui pose problème :\n\`\`\`${problematicCode}\`\`\``);
+      if (!inlineCodeMatches || inlineCodeMatches.length >= inlineCodeThreshold) {
         await message.react('❗');
-      } catch (error) {
-        console.error(`Error sending message: ${error}`);
       }
+    } catch (error) {
+      console.error(`Error sending message: ${error}`);
     }
   }
 }
+
+function extractProblematicCode(content, codeMatches) {
+  const allCodePositions = codeMatches.map(match => ({
+    start: match.index,
+    end: match.index + match[0].length
+  }));
+
+  allCodePositions.sort((a, b) => a.start - b.start);
+
+  let problematicCode = '';
+  let currentIndex = 0;
+
+  for (const { start, end } of allCodePositions) {
+    problematicCode += content.slice(currentIndex, start);
+    currentIndex = end;
+  }
+
+  problematicCode += content.slice(currentIndex);
+
+  return problematicCode;
+}
+
 
 function sendLevelUpEmbedMessage(chanel: Channel, member: GuildMember, user: User) {
   if (chanel instanceof TextChannel) {

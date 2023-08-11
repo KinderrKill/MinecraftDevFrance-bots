@@ -99,13 +99,12 @@ async function verifyCode(message: Message) {
 function sendLevelUpEmbedMessage(chanel: Channel, member: GuildMember, user: User) {
   if (chanel instanceof TextChannel) {
     chanel.send({
-      content: `Félicitation <@${member.id}> !`,
       embeds: [
         new EmbedBuilder()
           .setColor(0xffbf2f)
-          .setTitle(`Félicitation <@${member.id}> 🎉`)
+          .setTitle(`Niveau supérieur 🆙`)
           .setFields({
-            name: '\u200b',
+            name: 'Félicitation <@${member.id}> 🎉',
             value: `Tu viens de passer au **niveau ${user.getLevel()}** !`,
           }),
       ],
@@ -119,10 +118,10 @@ function sendLevelUpEmbedMessageWithRankUnlock(chanel: Channel, member: GuildMem
       embeds: [
         new EmbedBuilder()
           .setColor(0xffbf2f)
-          .setTitle(`Félicitation <@${member.id}> 🎉`)
+          .setTitle(`Niveau supérieur 🆙`)
           .setFields(
             {
-              name: '\u200b',
+              name: 'Félicitation <@${member.id}> 🎉',
               value: `Tu viens de passer au **niveau ${user.getLevel()}** !`,
             },
             {

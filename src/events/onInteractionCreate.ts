@@ -71,7 +71,7 @@ const event: BotEvent = {
 export default event;
 
 async function handleConfirmRules(interaction: ButtonInteraction) {
-  const roleId = '1138176436298063965'; // Remplacez par l'ID du rôle "MEMBER"
+  const roleId = getRole(ROLE.MEMBER, isDevMode);
 
   const role = interaction.guild.roles.cache.get(roleId);
 
@@ -92,13 +92,7 @@ async function handleConfirmRules(interaction: ButtonInteraction) {
   const membersWithRole = role.members.size;
   const memberCountChannel = interaction.guild.channels.cache.get('1138971570056986675');
 
-  memberCountChannel.setName('Membres : ' + (membersWithRole))
-    .then(updatedChannel => {
-      console.log(`Le nom du canal a été mis à jour : ${updatedChannel.name}`);
-    })
-    .catch(error => {
-      console.error('Une erreur s\'est produite lors de la mise à jour du nom du canal :', error);
-    });
+  memberCountChannel.setName('Membres : ' + (membersWithRole));
 
   sendWelcomeEmbedMessage(interaction, member);
 

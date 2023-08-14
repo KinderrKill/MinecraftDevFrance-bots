@@ -6,15 +6,12 @@ import {
   GuildMember,
   TextChannel,
   EmbedBuilder,
-  Guild,
-  AttachmentBuilder,
   ModalSubmitInteraction,
   Collection,
 } from 'discord.js';
 import { CHANNEL, getChannel, getRole } from '../utils/constants';
 import { BotEvent } from '../types';
 import { BUTTON_ID, ROLE } from '../utils/constants';
-import { User } from '../domain/leveling/user';
 
 const event: BotEvent = {
   name: Events.InteractionCreate,
@@ -73,33 +70,41 @@ const event: BotEvent = {
 
 export default event;
 
-function handleConfirmRules(interaction: ButtonInteraction) {
-  console.log(getRole(ROLE.MEMBER, isDevMode));
+async function handleConfirmRules(interaction: ButtonInteraction) {
+  const roleId = '1138176436298063965'; // Remplacez par l'ID du rôle "MEMBER"
 
-  const role = interaction.guild.roles.cache.get(getRole(ROLE.MEMBER, isDevMode));
+  const role = interaction.guild.roles.cache.get(roleId);
 
   if (!role) {
     return interaction.reply({ content: '[HandleConfirmRules] Role not found', ephemeral: true });
   }
 
-  const member = interaction.guild.members.cache.get(interaction.member.user.id);
+  const member = interaction.guild.members.cache.get(interaction.user.id);
 
   if (member.roles.cache.get(role.id)) {
-    return interaction.reply({ content: 'Vous avez déjà validé la lecture du réglement !', ephemeral: true });
+    return interaction.reply({ content: 'Vous avez déjà validé la lecture du règlement !', ephemeral: true });
   }
 
   member.roles.add(role);
 
   levelingManager.registerOrGetUser(member.id, member.displayName);
 
-  interaction.guild.channels.cache
-    .get(getChannel(CHANNEL.MEMBER_COUNT, isDevMode))
-    .setName('Membres : ' + (role.members.size + 1));
+  const membersWithRole = role.members.size;
+  const memberCountChannel = interaction.guild.channels.cache.get('1138971570056986675');
+
+  memberCountChannel.setName('Membres : ' + (membersWithRole))
+    .then(updatedChannel => {
+      console.log(`Le nom du canal a été mis à jour : ${updatedChannel.name}`);
+    })
+    .catch(error => {
+      console.error('Une erreur s\'est produite lors de la mise à jour du nom du canal :', error);
+    });
 
   sendWelcomeEmbedMessage(interaction, member);
 
   return interaction.reply({ content: 'Vous êtes maintenant membre de ce discord !', ephemeral: true });
 }
+
 
 async function sendWelcomeEmbedMessage(interaction: ButtonInteraction, member: GuildMember) {
   const chanel = interaction.client.channels.cache.get(getChannel(CHANNEL.WELCOME_HALL, isDevMode));

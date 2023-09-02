@@ -66,7 +66,7 @@ function sendLevelUpEmbedMessage(chanel: Channel, member: GuildMember, user: Use
           .setColor(0xffbf2f)
           .setTitle(`Niveau supérieur 🆙`)
           .setFields({
-            name: 'Félicitation <@${member.id}> 🎉',
+            name: `Félicitations <@${member.id}> 🎉`,
             value: `Tu viens de passer au **niveau ${user.getLevel()}** !`,
           }),
       ],
@@ -83,7 +83,7 @@ function sendLevelUpEmbedMessageWithRankUnlock(chanel: Channel, member: GuildMem
           .setTitle(`Niveau supérieur 🆙`)
           .setFields(
             {
-              name: 'Félicitation <@${member.id}> 🎉',
+              name: `Félicitations <@${member.id}> 🎉`',
               value: `Tu viens de passer au **niveau ${user.getLevel()}** !`,
             },
             {
